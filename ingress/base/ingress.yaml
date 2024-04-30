@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-ingress
+  labels:
+    name: nginx-ingress
+  annotations:
+    ingress.kubernetes.io/whitelist-source-range: 0.0.0.0/0
+    ingress.kubernetes.io/whitelist-x-forwarded-for: "true"
+spec:
+  rules:
+    - host: example.com
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: rest-service
+                port:
+                  name: http

@@ -1,0 +1,33 @@
+set dotenv-load
+set export
+
+# init:
+# 	skaffold init
+
+config-local:
+	skaffold config set --kube-context kind-kind local-cluster true
+
+dev PROFILE:
+	skaffold dev -p {{ PROFILE }}
+
+build PROFILE:
+	skaffold build -p {{ PROFILE }}
+
+# deploy PROFILE:
+# 	skaffold deploy -p {{ PROFILE }}
+
+render PROFILE:
+	skaffold render -p {{ PROFILE }}
+
+# apply PROFILE:
+# 	skaffold apply -p {{ PROFILE }}
+
+# build and deploy
+# pipeline PROFILE:
+# 	skaffold run -p {{ PROFILE }}
+
+image:
+	docker build -t cloud-native-app-demo:latest .
+
+kustomize ENV:
+	kubectl kustomize deployment/overlays/{{ ENV }} > release-{{ ENV }}.yaml

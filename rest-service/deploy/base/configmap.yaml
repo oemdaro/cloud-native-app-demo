@@ -1,0 +1,7 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: rest-service
+data:
+  DB_HOST: mysql
+  DB_PORT: "3306"

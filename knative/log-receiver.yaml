@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: log-receiver
+spec:
+  selector:
+    app: log-receiver
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: log-receiver
+      name: http
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: log-receiver
+  labels:
+    app: log-receiver
+spec:
+  containers:
+    - name: log-receiver
+      image: quay.io/openshift-knative/knative-eventing-sources-event-display
+      imagePullPolicy: Always
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+          name: log-receiver
+      resources:
+        requests:
+          cpu: 100m
+          memory: 64Mi
+        limits:
+          cpu: 100m
+          memory: 128Mi
+---
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: log-trigger
+spec:
+  broker: default
+  filter:
+    attributes:
+      type: curl.demo
+      myextension: my-extension-value
+  subscriber:
+    ref:
+      apiVersion: v1
+      kind: Service
+      name: log-receiver

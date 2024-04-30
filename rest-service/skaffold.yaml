@@ -1,0 +1,29 @@
+apiVersion: skaffold/v4beta9
+kind: Config
+metadata:
+  name: rest-service
+build:
+  artifacts:
+    - image: myrepo/rest-service
+      docker:
+        dockerfile: Dockerfile
+manifests:
+  kustomize:
+    paths:
+      - deploy/base
+profiles:
+  - name: development
+    manifests:
+      kustomize:
+        paths:
+          - deploy/overlays/development
+  - name: production
+    manifests:
+      kustomize:
+        paths:
+          - deploy/overlays/production
+  - name: staging
+    manifests:
+      kustomize:
+        paths:
+          - deploy/overlays/staging

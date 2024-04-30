@@ -1,0 +1,19 @@
+namespace: staging
+
+resources:
+  - ../../base
+
+patches:
+  - path: patch.yaml
+
+commonLabels:
+  app: rest-service
+  app.kubernetes.io/name: rest-service
+  app.kubernetes.io/part-of: rest-service
+  app.kubernetes.io/managed-by: kustomize
+
+configMapGenerator:
+  - name: rest-service
+    behavior: merge
+    literals:
+      - ENV=staging
